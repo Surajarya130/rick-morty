@@ -1,24 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
+import AllActors from "./Pages/AllActors";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import IndividualActor from "./Pages/IndividualActor";
+import Navbar from "./Components/Navbar";
+import Footer from "./Components/Footer";
+import Services from "./Pages/Services";
+import Aboutus from "./Pages/Aboutus";
 
 function App() {
+  let client = new ApolloClient({
+    uri: "https://rickandmortyapi.com/graphql",
+    cache: new InMemoryCache(),
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <ApolloProvider client={client}>
+        <BrowserRouter>
+          <Navbar />
+          <Switch>
+            <Route exact path="/">
+              <AllActors />
+            </Route>
+
+            <Route exact path="/services">
+              <Services />
+            </Route>
+
+            <Route exact path="/actor/:actorId">
+              <IndividualActor />
+            </Route>
+
+            <Route exact path="/aboutus">
+              <Aboutus />
+            </Route>
+          </Switch>
+
+          <Footer />
+        </BrowserRouter>
+      </ApolloProvider>
+    </>
   );
 }
 
